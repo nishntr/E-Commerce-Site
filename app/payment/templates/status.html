@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="container border w-50">
+        
+        {% if status == "success" %}
+            <h3>Your Order has been placed</h3><hr>
+            <p>Payment Approved</p>
+        {% else %}
+            <h3>Order Failed!</h3><hr>
+            <p>Payment Failed</p>
+        {% endif %} 
+        <p>Product: {{product}}</p>
+        
+        <p>Order id: {{txnid}}</p>
+    </div>
+
+{% endblock %}

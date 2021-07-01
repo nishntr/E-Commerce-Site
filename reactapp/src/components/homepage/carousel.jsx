@@ -1,17 +1,58 @@
-import React from 'react'
-import Carousel from 'react-bootstrap/Carousel'
+import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 
-export default function TopCarousel() {
+import Carousel from 'react-bootstrap/Carousel'
+import { connect } from 'react-redux'
+import { getProducts } from '../../actions/products'
+
+function TopCarousel(props) {
+    TopCarousel.propTypes = {
+        products: PropTypes.array.isRequired,
+        getProducts: PropTypes.func.isRequired
+    }
+
+    useEffect(() => {
+        props.getProducts()
+    }, [])
+
     return (
         <Carousel className="carousel" >
-            <Carousel.Item
-                onClick={() => console.log("iphone")}>
-                <img
+            {
+                props.products.map(product => (
 
-                    className="d-block "
-                    src="https://www.pngkey.com/png/full/762-7626746_iphone-x-mockup-with-colorful-back-iphone-x.png"
-                    alt="iPhone X"
-                />
+                    <Carousel.Item
+                        onClick={() => console.log("product")}>
+                        <img
+
+                            className="d-block "
+                            src={product.img_url}
+                            alt={product.name}
+                        />
+                        <Carousel.Caption className="">
+                            <h3>{product.name}</h3>
+                        </Carousel.Caption>
+                    </Carousel.Item>
+                ))}
+        </Carousel>
+
+    )
+}
+
+
+const mapStateToProps = state => ({
+    products: state.product.products
+})
+
+export default connect(mapStateToProps, { getProducts })(TopCarousel);
+
+{/* <Carousel.Item
+                    onClick={() => console.log("iphone")}>
+                    <img
+    
+                        className="d-block "
+                        src="https://www.pngkey.com/png/full/762-7626746_iphone-x-mockup-with-colorful-back-iphone-x.png"
+                        alt="iPhone X"
+                    />
                 <Carousel.Caption className="">
                     <h3>iPhone X</h3>
                 </Carousel.Caption>
@@ -37,7 +78,4 @@ export default function TopCarousel() {
                 <Carousel.Caption >
                     <h3>Nokia 3310</h3>
                 </Carousel.Caption>
-            </Carousel.Item>
-        </Carousel>
-    )
-}
+  </Carousel.Item>}*/}

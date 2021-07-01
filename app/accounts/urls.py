@@ -5,7 +5,7 @@ from knox import views as knox_views
 
 app_name = 'accounts'
 urlpatterns = [
-    path('auth', include('knox.urls')),
+    path('', include('knox.urls')),
     path('auth/register', RegisterUser.as_view()),
     path('auth/login', LoginUser.as_view()),
     path('auth/user', UserAPI.as_view()),

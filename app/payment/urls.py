@@ -1,11 +1,12 @@
-from django.urls import path
-from .views import checkout
-from .views import status, OrdersList
-
+from django.urls import include, path
+from .views import CheckoutView, ProductView
+from rest_framework import routers
 app_name = 'payment'
 
+router = routers.DefaultRouter()
+router.register('products', ProductView, 'Products')
+
 urlpatterns = [
-    path('', checkout.as_view(), name="checkout"),
-    path('status/', status),
-    path('orders/', OrdersList.as_view(), name="orders")
+    path('', include(router.urls)),
+    path('checkout', CheckoutView.as_view(), name='checkout'),
 ]

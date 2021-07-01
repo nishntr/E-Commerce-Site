@@ -1,41 +1,51 @@
 from accounts.models import User
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
+# from django.views.decorators.csrf import csrf_exempt
 import random
 import string
 import hashlib
 from django.shortcuts import render
-from django.views import View
-from django.views.generic.list import ListView
-from .models import Transaction
-from payment.models import Product
-
+from .models import Transaction, Product
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
+from rest_framework import permissions, status
+from .serializers import ProductSerializer, TransactionSerializer
+from rest_framework.response import Response
 
 # sha512 vd2Y1X|k8WnSppfWj5dO5|10.00|iPhone|PayU User|test@gmail.com|||||||||||Brg97QyF
 # test card 5123-4567-8901-2346 4012-0010-3714-1112 123 123456
 
 
-class checkout(LoginRequiredMixin, View):
-    login_url = '/login/'
+class ProductView(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
-    def get(self, request, *args, **kwargs):
-        products = Product.objects.all()
 
-        return render(request, 'checkout.html', {'products': products})
+class CheckoutView(CreateAPIView):
+    permission_class = [permissions.IsAuthenticated]
+    serializer_class = TransactionSerializer
 
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         key = 'gtKFFx'
         salt = 'wia56q6O'
-        product_id = request.POST.get('pk')
+        print(request.data)
         name = request.user.name
         email = request.user.email
 
+        product_id = request.data['product_id']
+        product = Product.objects.get(pk=product_id)
+        amount = str(product.price)
         txnid = ''.join(random.choices(
             string.ascii_uppercase + string.digits, k=24))
 
-        product = Product.objects.get(pk=product_id)
-        amount = str(product.price)
+        serializer = self.get_serializer(data={
+            'txnid': txnid,
+            'product': product_id,
+            'user': request.user.id,
+            'email': email
+        })
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
 
         strg = key + '|' + txnid + '|' + amount + '|' + \
             product.name + '|' + name + '|' + email + '|||||||||||' + salt
@@ -55,43 +65,49 @@ class checkout(LoginRequiredMixin, View):
 
         }
 
-        t = Transaction(txnid=txnid,
-                        product=product, user=request.user, email=email)
-        t.save()
-
-        return render(request, 'redirect.html', context=context)
+        headers = self.get_success_headers(serializer.data)
+        return Response(context, status=status.HTTP_201_CREATED, headers=headers)
 
 
-@login_required(login_url='/login/')
-@csrf_exempt
-def status(request):
-    if request.method == "POST":
-        data = dict(request.POST)
-        status = request.POST.get('status')
-        txnid = request.POST.get('txnid')
+class Orders(RetrieveUpdateAPIView):
+    queryset = Transaction.objects.all().order_by('-date')
+    serializer_class = TransactionSerializer
+    permission_class = [permissions.IsAuthenticated]
 
-        t = Transaction.objects.get(txnid=txnid)
-        if status == 'success':
-            t.status = True
-            t.save()
-            print("completed for:" + t.user.name)
-
-        context = {
-            'txnid': txnid,
-            'status': status,
-            'product': t.product.name,
-
-        }
-
-        return render(request, 'status.html', context=context)
+    def perform_update(self, serializer):
+        serializer.save(status=True)
 
 
-class OrdersList(LoginRequiredMixin, ListView):
-    login_url = '/login/'
+# @login_required(login_url='/login/')
+# @csrf_exempt
+# def status(request):
+#     if request.method == "POST":
+#         data = dict(request.POST)
+#         status = request.POST.get('status')
+#         txnid = request.POST.get('txnid')
 
-    model = Transaction
-    template_name = "orders.html"
-    ordering = ['-date']
+#         t = Transaction.objects.get(txnid=txnid)
+#         if status == 'success':
+#             t.status = True
+#             t.save()
+#             print("completed for:" + t.user.name)
+
+#         context = {
+#             'txnid': txnid,
+#             'status': status,
+#             'product': t.product.name,
+
+#         }
+
+#         return render(request, 'status.html', context=context)
+
+
+# class OrdersList(LoginRequiredMixin, ListView):
+#     login_url = '/login/'
+
+#     model = Transaction
+#     template_name = "orders.html"
+#     ordering = ['-date']
 
     # Array
     # (

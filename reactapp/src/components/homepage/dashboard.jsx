@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { } from 'react';
 
 import TopCarousel from "./carousel";
 import Products from './products';
+import Checkout from '../checkout/checkout';
 import "../css/dashboard.css";
 
 function Dashboard() {
@@ -9,6 +10,7 @@ function Dashboard() {
         <React.Fragment>
             <TopCarousel />
             <Products />
+            <Checkout />
 
         </React.Fragment>
 

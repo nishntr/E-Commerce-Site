@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-// import './css/header.css';
+import './css/header.css';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { connect, useDispatch } from 'react-redux';
@@ -18,7 +18,8 @@ function Header(props) {
     const dispatch = useDispatch();
 
 
-    const { isAuthenticated, user } = props.auth;
+    // const { isAuthenticated, user } = props.auth;
+    const isAuthenticated = (props.auth.token !== null)
     const authLinks = (
         <Nav className="justify-content-end" style={{ width: "100%", paddingRight: 19 }}>
             <Nav.Link onClick={() => { props.logout(); dispatch({ type: "LogoutSuccess" }) }} style={{ textDecoration: "none" }} >
@@ -39,7 +40,7 @@ function Header(props) {
         </Nav>
     );
     return (
-        <Navbar bg="light" variant="light">
+        <Navbar className="nav-style">
             <Navbar.Brand href="home">E SHOPP</Navbar.Brand>
 
             {isAuthenticated ? authLinks : guestLinks}

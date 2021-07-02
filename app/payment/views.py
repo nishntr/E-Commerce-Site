@@ -3,7 +3,7 @@ from accounts.models import User
 import random
 import string
 import hashlib
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Transaction, Product
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
@@ -59,8 +59,8 @@ class CheckoutView(CreateAPIView):
             'product': product.name,
             'name': name,
             'email': email,
-            'surl': 'http://localhost:8000/status/',
-            'furl': 'http://localhost:8000/status/',
+            'surl': 'http://localhost:8000/status',
+            'furl': 'http://localhost:8000/status',
             'hash': hash
 
         }
@@ -77,6 +77,19 @@ class Orders(RetrieveUpdateAPIView):
     def perform_update(self, serializer):
         serializer.save(status=True)
 
+
+class StatusView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        status = request.POST.get('status')
+        txnid = request.POST.get('txnid')
+
+        t = Transaction.objects.get(txnid=txnid)
+        if status == 'success':
+            t.status = True
+            t.save()
+            print("completed for:" + t.user.name)
+        return redirect('payment:redirect')
 
 # @login_required(login_url='/login/')
 # @csrf_exempt

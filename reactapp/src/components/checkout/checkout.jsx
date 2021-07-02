@@ -7,30 +7,30 @@ export const Checkout = (props) => {
     return (
         <div>
             <form action="https://test.payu.in/_payment" method="post">
-                <input type="hidden" name="key" value="{{key}}" />
-                <input type="hidden" name="txnid" value="{{txnid}}" />
-                <input type="hidden" name="amount" value="{{amount}}" />
-                <input type="hidden" name="productinfo" value="{{product}}" />
-                <input type="hidden" name="firstname" value="{{name}}" />
-                <input type="hidden" name="email" value="{{email}}" />
-                <input type="hidden" name="surl" value="{{surl}}" />
-                <input type="hidden" name="hash" value="{{hash}}" />
+                <input type="hidden" name="key" value={props.order.key} />
+                <input type="hidden" name="txnid" value={props.order.txnid} />
+                <input type="hidden" name="amount" value={props.order.amount} />
+                <input type="hidden" name="productinfo" value={props.order.product} />
+                <input type="hidden" name="firstname" value={props.order.name} />
+                <input type="hidden" name="email" value={props.order.email} />
+                <input type="hidden" name="surl" value={props.order.surl} />
+                <input type="hidden" name="hash" value={props.order.hash} />
                 <input type="submit" />
             </form>
         </div>
     )
 }
 
-// Checkout.propTypes = {
-//     props: PropTypes
-// }
-
-const mapStateToProps = (state) => ({
-
-})
-
-const mapDispatchToProps = {
-
+Checkout.propTypes = {
+    order: PropTypes.array.isRequired
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout)
+const mapStateToProps = (state) => ({
+    order: state.orders.currentOrder
+})
+
+// const mapDispatchToProps = {
+
+// }
+
+export default connect(mapStateToProps)(Checkout)

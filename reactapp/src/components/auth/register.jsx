@@ -4,7 +4,9 @@ import { register } from '../../actions/auth';
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
+import { Button, Icon, Form } from 'semantic-ui-react'
 
+import '../css/auth.css';
 
 
 function Register(props) {
@@ -39,60 +41,60 @@ function Register(props) {
     }
     return (
         <div>
-            <Container className="m-3 w-50 ">
-                <form onSubmit={handleSubmit} >
+            <Container className=" rounded auth-style  " >
+                <Form onSubmit={handleSubmit} >
                     <h1>Register</h1>
-                    <div className="form-group mb-3">
-                        <label className="form-label">Name</label>
-                        <input
-                            type="text" className="form-control"
+                    <Form.Field>
+                        <label>Name</label>
+                        <input placeholder='Name'
                             onChange={(e) => setName(e.target.value)}
-                            value={name}
-                        />
-                    </div>
-                    <div className="form-group mb-3">
-                        <label className="form-label">Username</label>
-                        <input
-                            type="text" className="form-control"
-                            onChange={(e) => setUsername(e.target.value)}
-                            value={username}
-                        />
-                    </div>
-                    <div className="form-group mb-3">
-                        <label className="form-label">Email Address</label>
-                        <input
-                            type="email" className="form-control"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                        />
-                    </div>
-                    <div className="form-group mb-3">
-                        <label className="form-label">Password</label>
-                        <input
-                            type="password" className="form-control"
-                            onChange={(e) => setPassword(e.target.value)}
-                            value={password}
-                        />
-                    </div>
-                    <div className="form-group mb-3">
-                        <label className="form-label">Confirm Password</label>
-                        <input
-                            type="password" className="form-control"
-                            onChange={(e) => setPassword2(e.target.value)}
-                            value={password2}
-                        />
-                    </div>
+                            value={name} />
+                    </Form.Field>
 
-                    <button type="submit" class="btn btn-primary mb-3">Register</button>
+                    <Form.Field>
+                        <label>Username</label>
+                        <input placeholder='Username'
+                            onChange={(e) => setUsername(e.target.value)}
+                            value={username} />
+                    </Form.Field>
+
+                    <Form.Field>
+                        <label>Email Address</label>
+                        <input placeholder='Email Address'
+                            type="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email} />
+                    </Form.Field>
+
+                    <Form.Group widths='equal'>
+                        <Form.Input fluid label='Password' placeholder='Password'
+                            type="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password} />
+                        <Form.Input fluid label='Confirm Password' placeholder='Confirm Password'
+                            type="password"
+                            onChange={(e) => setPassword2(e.target.value)}
+                            value={password2} />
+                    </Form.Group>
+
+                    <Button color='violet' animated>
+                        <Button.Content visible>Register</Button.Content>
+                        <Button.Content hidden>
+                            <Icon name='arrow right' />
+                        </Button.Content>
+                    </Button>
                     <p>Already have an account?  <NavLink to="/login">Login</NavLink></p>
-                </form>
+                </Form>
+
+
+
             </Container>
         </div>
     )
 }
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.token !== null
 })
 
 export default connect(mapStateToProps, { register })(Register);

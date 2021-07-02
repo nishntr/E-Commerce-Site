@@ -1,0 +1,19 @@
+.imgstyle{ 
+    height:120px;
+    margin-left: auto; 
+    margin-right: auto;
+    width: auto;
+}
+
+@media (min-width:500px) {    
+    .this-class 
+    { height:290px;
+        margin-left: auto; 
+        margin-right: auto;
+        width: auto; }
+    
+}
+
+.p-style{
+    box-shadow:  1px 4px 22px  #e4e4e4;
+ }

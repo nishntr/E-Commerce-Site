@@ -3,12 +3,15 @@ import PropTypes from 'prop-types'
 
 import Carousel from 'react-bootstrap/Carousel'
 import { connect } from 'react-redux'
-import { getProducts } from '../../actions/products'
+import { getProducts } from '../../actions/products';
+import { checkout } from '../../actions/orders';
+import { Button } from 'react-bootstrap';
 
 function TopCarousel(props) {
     TopCarousel.propTypes = {
         products: PropTypes.array.isRequired,
-        getProducts: PropTypes.func.isRequired
+        getProducts: PropTypes.func.isRequired,
+        checkout: PropTypes.func.isRequired
     }
 
     useEffect(() => {
@@ -16,12 +19,13 @@ function TopCarousel(props) {
     }, [])
 
     return (
-        <Carousel className="carousel" >
+        <Carousel className="carousel m-3" >
             {
                 props.products.map(product => (
 
                     <Carousel.Item
-                        onClick={() => console.log("product")}>
+                        onClick={() => props.checkout(product.id)}
+                    >
                         <img
 
                             className="d-block "
@@ -30,6 +34,7 @@ function TopCarousel(props) {
                         />
                         <Carousel.Caption className="">
                             <h3>{product.name}</h3>
+                            {/* <Button onClick={() => props.checkout(product.id)}>Buy Now</Button> */}
                         </Carousel.Caption>
                     </Carousel.Item>
                 ))}
@@ -43,7 +48,7 @@ const mapStateToProps = state => ({
     products: state.product.products
 })
 
-export default connect(mapStateToProps, { getProducts })(TopCarousel);
+export default connect(mapStateToProps, { getProducts, checkout })(TopCarousel);
 
 {/* <Carousel.Item
                     onClick={() => console.log("iphone")}>

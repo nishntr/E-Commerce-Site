@@ -5,6 +5,7 @@ import Login from './components/auth/login';
 import Register from './components/auth/register';
 import { Provider } from 'react-redux';
 import store from './store';
+import PrivateRoute from './PrivateRoute';
 
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
@@ -16,7 +17,7 @@ function App() {
         <React.Fragment>
           <Header />
           <Switch>
-            <Route exact path="/" component={Dashboard} />
+            <PrivateRoute exact path="/" component={Dashboard} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
           </Switch>

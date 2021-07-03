@@ -69,7 +69,7 @@ function Cart(props) {
                                 onClick={() => props.clearCart()} color='grey' animated>
                                 <Button.Content visible>Clear</Button.Content>
                                 <Button.Content hidden>
-                                    <Icon name='bin' />
+                                    <Icon name='delete' />
                                 </Button.Content>
                             </Button>
                             <Button

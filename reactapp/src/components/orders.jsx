@@ -19,26 +19,27 @@ function Orders(props) {
 
     return (
         <Container className=" rounded cart-style" style={{ maxWidth: "476px" }}>
-            <List animated verticalAlign='middle'>
+            <List ordered animated verticalAlign='middle'>
                 {props.orders.map(order => {
                     console.log()
                     let namelist = ""
-                    order.product.forEach((p) => { namelist += products[order.product[0]] + "  " })
+                    order.product.forEach((p) => { namelist += products[p] + ", " })
                     return (<List.Item>
-                        <List.Content>
-                            <List.Header>{namelist}</List.Header>
-                        </List.Content>
                         <List.Content floated='right'>
                             <List.Description>
                                 ₹{order.amount}
                             </List.Description>
                         </List.Content>
-
+                        <List.Content>
+                            <List.Header>{namelist}</List.Header>
+                        </List.Content>
+                        < hr />
                     </List.Item>)
+
+
                 }
                 )
                 }
-                <hr />
 
 
             </List>

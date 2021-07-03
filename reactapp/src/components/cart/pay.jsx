@@ -1,7 +1,7 @@
 import React, { Component, useState, forwardRef, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types';
 import { Button, Header, Modal } from 'semantic-ui-react'
-
+import { clearCart } from '../../actions/cart';
 import { connect } from 'react-redux'
 
 export const Pay = forwardRef((props, ref) => {
@@ -28,7 +28,7 @@ export const Pay = forwardRef((props, ref) => {
             >
                 <Modal.Header>Select Payment Option</Modal.Header>
                 <Modal.Content image>
-                    <Modal.Description style={{ paddingLeft: "5%" }}>
+                    <Modal.Description style={{ paddingLeft: "7%" }}>
                         <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2" />
                         <label class="form-check-label" for="gridRadios2">
                             <img style={{ height: "30%", width: "30%" }} src="https://seeklogo.com/images/P/payu-logo-C104D0EC9F-seeklogo.com.png"
@@ -65,7 +65,7 @@ export const Pay = forwardRef((props, ref) => {
 
                             if (document.getElementById("gridRadios2").checked) {
                                 document.forms[0].submit();
-
+                                props.clearCart()
                                 setOpen(false);
                             }
                         }}
@@ -80,7 +80,8 @@ export const Pay = forwardRef((props, ref) => {
 })
 
 Pay.propTypes = {
-    order: PropTypes.array.isRequired
+    order: PropTypes.array.isRequired,
+    clearCart: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
@@ -91,4 +92,4 @@ const mapStateToProps = (state) => ({
 
 // }
 
-export default connect(mapStateToProps)(Pay)
+export default connect(mapStateToProps, { clearCart })(Pay)

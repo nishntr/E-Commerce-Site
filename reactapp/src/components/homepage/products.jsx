@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col, Container } from 'react-bootstrap'
-import { checkout } from '../../actions/orders';
+import { addItem } from '../../actions/cart';
 import { connect } from 'react-redux'
 
 import { Button, Card, Icon, Image } from 'semantic-ui-react'
@@ -10,7 +10,7 @@ import '../css/products.css'
 function Products(props) {
     Products.propTypes = {
         products: PropTypes.array.isRequired,
-        checkout: PropTypes.func.isRequired
+        addItem: PropTypes.func.isRequired
     }
     return (
         <Container>
@@ -30,7 +30,7 @@ function Products(props) {
                                     </Card.Description>
                                 </Card.Content>
                                 <Card.Content extra>
-                                    <Button>Buy Now</Button>
+                                    <Button onClick={() => props.addItem(product)}>Buy Now</Button>
                                 </Card.Content>
                             </Card>
                         </Col>
@@ -45,4 +45,4 @@ const mapStateToProps = state => ({
     products: state.product.products
 })
 
-export default connect(mapStateToProps, { checkout })(Products);
+export default connect(mapStateToProps, { addItem })(Products);

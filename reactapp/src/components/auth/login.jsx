@@ -29,36 +29,34 @@ function Login(props) {
     }
 
     return (
-        <div>
-            <Container className=" rounded auth-style" >
+        <Container className=" rounded auth-style" style={{ maxWidth: "576px" }}>
 
-                <Form onSubmit={onSubmit}>
-                    <h1>Login</h1>
-                    <Form.Field className="form-group">
-                        <label>Username</label>
-                        <input placeholder='Username' className="form-control"
-                            onChange={(e) => setUsername(e.target.value)}
-                            value={username} />
-                    </Form.Field>
-                    <Form.Field className="form-group">
-                        <label>Password</label>
-                        <input placeholder='Password'
-                            type="password" className="form-control"
-                            onChange={(e) => setPassword(e.target.value)}
-                            value={password}
-                        />
-                    </Form.Field>
-                    <Button color='violet' animated>
-                        <Button.Content visible>Submit</Button.Content>
-                        <Button.Content hidden>
-                            <Icon name='arrow right' />
-                        </Button.Content>
-                    </Button>
-                    <p>Don't have an account?  <NavLink to="/register">Register</NavLink></p>
-                </Form>
+            <Form onSubmit={onSubmit}>
+                <h1>Login</h1>
+                <Form.Field className="form-group">
+                    <label>Username</label>
+                    <input placeholder='Username' className="form-control"
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={username} />
+                </Form.Field>
+                <Form.Field className="form-group">
+                    <label>Password</label>
+                    <input placeholder='Password'
+                        type="password" className="form-control"
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={password}
+                    />
+                </Form.Field>
+                <Button color='violet' animated>
+                    <Button.Content visible>Submit</Button.Content>
+                    <Button.Content hidden>
+                        <Icon name='arrow right' />
+                    </Button.Content>
+                </Button>
+                <p>Don't have an account?  <NavLink to="/register">Register</NavLink></p>
+            </Form>
 
-            </Container>
-        </div>
+        </Container>
     )
 }
 

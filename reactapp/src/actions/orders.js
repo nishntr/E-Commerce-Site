@@ -2,7 +2,7 @@ import axios from "axios";
 import { tokenConfig } from "./auth";
 
 export const getOrders = () => (dispatch, getState) => {
-    axios.get('/api/', tokenConfig(getState))
+    axios.get('/orders', tokenConfig(getState))
         .then(res => {
             dispatch({
                 type: "GetOrders",
@@ -12,16 +12,21 @@ export const getOrders = () => (dispatch, getState) => {
         ).catch(err => console.log(err));
 }
 
-export const checkout = (product_id) => (dispatch, getState) => {
-    axios.post('/checkout', { "product_id": product_id }, tokenConfig(getState))
+export const checkout = (product_ids, amount, names) => (dispatch, getState) => {
+    axios.post('/checkout', { "product_ids": product_ids, "amount": amount, "names": names }, tokenConfig(getState))
         .then(res => {
             console.log(res.data);
             dispatch({
                 type: "Checkout",
                 payload: res.data
             });
+
         }
-        ).catch(err => console.log(err));
+        ).catch(err => {
+            console.log(err);
+        });
+    return true
+
 }
 
 

@@ -23,9 +23,7 @@ function TopCarousel(props) {
             {
                 props.products.map(product => (
 
-                    <Carousel.Item
-                        onClick={() => props.checkout(product.id)}
-                    >
+                    <Carousel.Item>
                         <img
 
                             className="d-block "

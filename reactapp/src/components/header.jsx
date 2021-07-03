@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
+import { connect, useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types'
 
 import './css/header.css';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { connect, useDispatch } from 'react-redux';
+import { Icon } from 'semantic-ui-react';
 import { logout } from '../actions/auth';
-import { NavLink } from 'react-router-dom';
 
 function Header(props) {
 
@@ -22,6 +23,11 @@ function Header(props) {
     const isAuthenticated = (props.auth.token !== null)
     const authLinks = (
         <Nav className="justify-content-end" style={{ width: "100%", paddingRight: 19 }}>
+            <Nav.Link   >
+                <NavLink style={{ textDecoration: "none" }} to="/cart">
+                    <Icon name='shopping cart' />Cart
+                </NavLink>
+            </Nav.Link>
             <Nav.Link onClick={() => { props.logout(); dispatch({ type: "LogoutSuccess" }) }} style={{ textDecoration: "none" }} >
                 Logout
             </Nav.Link>
@@ -41,7 +47,8 @@ function Header(props) {
     );
     return (
         <Navbar className="nav-style">
-            <Navbar.Brand href="home">E SHOPP</Navbar.Brand>
+            <Navbar.Brand href="home"> <Icon name='shopping bag' />
+                E SHOPP</Navbar.Brand>
 
             {isAuthenticated ? authLinks : guestLinks}
 

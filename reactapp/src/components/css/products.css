@@ -6,8 +6,8 @@
 }
 
 @media (min-width:500px) {    
-    .this-class 
-    { height:290px;
+    .imgstyle
+    { height:220px;
         margin-left: auto; 
         margin-right: auto;
         width: auto; }

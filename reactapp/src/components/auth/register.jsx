@@ -41,7 +41,7 @@ function Register(props) {
     }
     return (
         <div>
-            <Container className=" rounded auth-style  " >
+            <Container className=" rounded auth-style  " style={{ maxWidth: "576px" }}>
                 <Form onSubmit={handleSubmit} >
                     <h1>Register</h1>
                     <Form.Field>

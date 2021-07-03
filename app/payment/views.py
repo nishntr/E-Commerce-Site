@@ -32,15 +32,15 @@ class CheckoutView(CreateAPIView):
         name = request.user.name
         email = request.user.email
 
-        product_id = request.data['product_id']
-        product = Product.objects.get(pk=product_id)
-        amount = str(product.price)
+        product_ids = request.data['product_ids']
+        amount = str(request.data['amount'])
+        names = request.data['names']
         txnid = ''.join(random.choices(
             string.ascii_uppercase + string.digits, k=24))
 
         serializer = self.get_serializer(data={
             'txnid': txnid,
-            'product': product_id,
+            'product': product_ids,
             'user': request.user.id,
             'email': email
         })
@@ -48,7 +48,7 @@ class CheckoutView(CreateAPIView):
         self.perform_create(serializer)
 
         strg = key + '|' + txnid + '|' + amount + '|' + \
-            product.name + '|' + name + '|' + email + '|||||||||||' + salt
+            names + '|' + name + '|' + email + '|||||||||||' + salt
         hash = hashlib.sha512(strg.encode()).hexdigest()
 
         context = {
@@ -56,7 +56,7 @@ class CheckoutView(CreateAPIView):
             'salt': salt,
             'txnid': txnid,
             'amount': amount,
-            'product': product.name,
+            'product': names,
             'name': name,
             'email': email,
             'surl': 'http://localhost:8000/status',

@@ -4,6 +4,7 @@ import { tokenConfig } from "./auth";
 export const getOrders = () => (dispatch, getState) => {
     axios.get('/orders', tokenConfig(getState))
         .then(res => {
+            console.log("getorders")
             dispatch({
                 type: "GetOrders",
                 payload: res.data

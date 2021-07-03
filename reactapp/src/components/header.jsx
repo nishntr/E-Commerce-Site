@@ -28,6 +28,11 @@ function Header(props) {
                     <Icon name='shopping cart' />Cart
                 </NavLink>
             </Nav.Link>
+            <Nav.Link   >
+                <NavLink style={{ textDecoration: "none" }} to="/orders">
+                    <Icon name='clipboard list' />Orders
+                </NavLink>
+            </Nav.Link>
             <Nav.Link onClick={() => { props.logout(); dispatch({ type: "LogoutSuccess" }) }} style={{ textDecoration: "none" }} >
                 Logout
             </Nav.Link>

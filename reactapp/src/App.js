@@ -10,6 +10,7 @@ import PrivateRoute from './PrivateRoute';
 
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Cart from './components/cart/cart';
+import Orders from './components/orders';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Switch>
               <PrivateRoute exact path="/" component={Dashboard} />
               <PrivateRoute exact path="/cart" component={Cart} />
+              <PrivateRoute exact path="/orders" component={Orders} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
             </Switch>

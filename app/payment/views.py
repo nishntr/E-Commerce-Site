@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 from .models import Transaction, Product
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAPIView
 from rest_framework import permissions, status
 from .serializers import ProductSerializer, TransactionSerializer
 from rest_framework.response import Response
@@ -33,7 +33,7 @@ class CheckoutView(CreateAPIView):
         email = request.user.email
 
         product_ids = request.data['product_ids']
-        amount = str(request.data['amount'])
+        amount = request.data['amount']
         names = request.data['names']
         txnid = ''.join(random.choices(
             string.ascii_uppercase + string.digits, k=24))
@@ -42,12 +42,14 @@ class CheckoutView(CreateAPIView):
             'txnid': txnid,
             'product': product_ids,
             'user': request.user.id,
-            'email': email
+            'email': email,
+            'amount': amount
+
         })
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        strg = key + '|' + txnid + '|' + amount + '|' + \
+        strg = key + '|' + txnid + '|' + str(amount) + '|' + \
             names + '|' + name + '|' + email + '|||||||||||' + salt
         hash = hashlib.sha512(strg.encode()).hexdigest()
 
@@ -55,7 +57,7 @@ class CheckoutView(CreateAPIView):
             'key': key,
             'salt': salt,
             'txnid': txnid,
-            'amount': amount,
+            'amount': str(amount),
             'product': names,
             'name': name,
             'email': email,
@@ -69,13 +71,17 @@ class CheckoutView(CreateAPIView):
         return Response(context, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class Orders(RetrieveUpdateAPIView):
+class Orders(ListAPIView):
     queryset = Transaction.objects.all().order_by('-date')
     serializer_class = TransactionSerializer
     permission_class = [permissions.IsAuthenticated]
 
-    def perform_update(self, serializer):
-        serializer.save(status=True)
+    def get_queryset(self):
+        user = self.request.user
+        return user.orders.all()
+
+    # def perform_update(self, serializer):
+    #     serializer.save(status=True)
 
 
 class StatusView(APIView):

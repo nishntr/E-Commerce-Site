@@ -5,3 +5,9 @@ export const addItem = (item) => (dispatch) => {
         payload: item
     });
 }
+
+export const clearCart = () => dispatch => {
+    dispatch({
+        type: "ClearCart"
+    })
+}

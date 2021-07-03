@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { checkout } from '../../actions/orders'
+import { clearCart } from '../../actions/cart'
 import { Container } from 'react-bootstrap'
 import { Icon, Image, List, Button, Header, Modal } from 'semantic-ui-react'
 import { Pay } from './pay'
@@ -65,6 +66,13 @@ function Cart(props) {
                     <List.Item>
                         <List.Content floated='right'>
                             <Button
+                                onClick={() => props.clearCart()} color='grey' animated>
+                                <Button.Content visible>Clear</Button.Content>
+                                <Button.Content hidden>
+                                    <Icon name='bin' />
+                                </Button.Content>
+                            </Button>
+                            <Button
                                 onClick={async () => {
                                     let res = await props.checkout(ids, total, namelist);
                                     console.log(res)
@@ -96,7 +104,8 @@ function Cart(props) {
 Cart.propTypes = {
     items: PropTypes.array.isRequired,
     checkout: PropTypes.func.isRequired,
-    order: PropTypes.array.isRequired
+    order: PropTypes.array.isRequired,
+    clearCart: PropTypes.func.isRequired
 
 }
 
@@ -105,5 +114,6 @@ const mapStateToProps = state => ({
     order: state.orders.currentOrder
 })
 
-export default connect(mapStateToProps, { checkout })(Cart)
+
+export default connect(mapStateToProps, { checkout, clearCart })(Cart)
 

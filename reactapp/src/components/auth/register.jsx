@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { Button, Icon, Form } from 'semantic-ui-react'
 
-import '../css/auth.css';
+import '../css/main.css';
 
 
 function Register(props) {

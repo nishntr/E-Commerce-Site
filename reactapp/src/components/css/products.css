@@ -3,6 +3,8 @@
     margin-left: auto; 
     margin-right: auto;
     width: auto;
+    background-color: white !important;
+    
 }
 
 @media (min-width:500px) {    
@@ -10,10 +12,13 @@
     { height:220px;
         margin-left: auto; 
         margin-right: auto;
-        width: auto; }
+        width: auto;
+        background-color: white !important; }
     
 }
 
 .p-style{
     box-shadow:  1px 4px 22px  #e4e4e4;
- }
+    margin-bottom: 20px !important; }
+
+

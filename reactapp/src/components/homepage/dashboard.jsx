@@ -5,12 +5,12 @@ import TopCarousel from "./carousel";
 import Products from './products';
 import "../css/dashboard.css";
 
-function Dashboard() {
+function Dashboard(props) {
     return (
         <React.Fragment>
-            <TopCarousel />
+            <TopCarousel {...props} />
             <ProductDivider />
-            <Products />
+            <Products {...props} />
 
         </React.Fragment>
 
@@ -19,7 +19,7 @@ function Dashboard() {
 
 
 const ProductDivider = () => (
-    <Divider horizontal>
+    <Divider horizontal style={{ marginTop: "40px" }}>
         <Header as='h4'>
             <Icon name='th large' />
             Products

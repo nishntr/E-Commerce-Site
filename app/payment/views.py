@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 from .models import Transaction, Product
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAPIView, DestroyAPIView
 from rest_framework import permissions, status
 from .serializers import ProductSerializer, TransactionSerializer
 from rest_framework.response import Response
@@ -38,50 +38,60 @@ class CheckoutView(CreateAPIView):
         txnid = ''.join(random.choices(
             string.ascii_uppercase + string.digits, k=24))
 
-        serializer = self.get_serializer(data={
-            'txnid': txnid,
-            'product': product_ids,
-            'user': request.user.id,
-            'email': email,
-            'amount': amount
+        try:
+            serializer = self.get_serializer(data={
+                'txnid': txnid,
+                'product': product_ids,
+                'user': request.user.id,
+                'email': email,
+                'amount': amount
 
-        })
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+            })
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
 
-        strg = key + '|' + txnid + '|' + str(amount) + '|' + \
-            names + '|' + name + '|' + email + '|||||||||||' + salt
-        hash = hashlib.sha512(strg.encode()).hexdigest()
+            strg = key + '|' + txnid + '|' + str(amount) + '|' + \
+                names + '|' + name + '|' + email + '|||||||||||' + salt
+            hash = hashlib.sha512(strg.encode()).hexdigest()
+            print()
+            context = {
+                'id': serializer.data['id'],
+                'key': key,
+                'salt': salt,
+                'txnid': txnid,
+                'amount': str(amount),
+                'product': names,
+                'name': name,
+                'email': email,
+                'surl': 'http://localhost:8000/status',
+                'furl': 'http://localhost:8000/status',
+                'hash': hash
 
-        context = {
-            'key': key,
-            'salt': salt,
-            'txnid': txnid,
-            'amount': str(amount),
-            'product': names,
-            'name': name,
-            'email': email,
-            'surl': 'http://localhost:8000/status',
-            'furl': 'http://localhost:8000/status',
-            'hash': hash
-
-        }
+            }
+        except Exception as e:
+            print(e)
+            raise
 
         headers = self.get_success_headers(serializer.data)
         return Response(context, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class Orders(ListAPIView):
-    queryset = Transaction.objects.all().order_by('-date')
+class OrdersList(ListAPIView):
     serializer_class = TransactionSerializer
     permission_class = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        return user.orders.all()
+        return user.orders.all().order_by('-date')
 
     # def perform_update(self, serializer):
     #     serializer.save(status=True)
+
+
+class OrdersDelete(DestroyAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    permission_class = [permissions.IsAuthenticated]
 
 
 class StatusView(APIView):

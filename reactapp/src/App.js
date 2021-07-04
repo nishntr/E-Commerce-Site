@@ -8,7 +8,7 @@ import { store, persistor } from './store';
 import { PersistGate } from 'redux-persist/integration/react'
 import PrivateRoute from './PrivateRoute';
 
-import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Cart from './components/cart/cart';
 import Orders from './components/orders';
 

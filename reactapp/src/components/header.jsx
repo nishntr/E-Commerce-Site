@@ -51,15 +51,13 @@ function Header(props) {
         </Nav>
     );
     return (
-        <Navbar className="nav-style">
-            <Navbar.Brand href="home"> <Icon name='shopping bag' />
+        <Navbar sticky="top" className="nav-style">
+            <Navbar.Brand href="/"> <Icon name='shopping bag' />
                 E SHOPP</Navbar.Brand>
 
             {isAuthenticated ? authLinks : guestLinks}
 
         </Navbar>
-
-
 
     )
 }

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
 import { Button, Icon, Form } from 'semantic-ui-react'
 
-import '../css/auth.css';
+import '../css/main.css';
 
 
 function Login(props) {

@@ -1,8 +1,5 @@
 import React, { Component, useState, forwardRef, useImperativeHandle } from 'react'
-import PropTypes from 'prop-types';
 import { Button, Header, Modal } from 'semantic-ui-react'
-import { clearCart } from '../../actions/cart';
-import { connect } from 'react-redux'
 
 export const Pay = forwardRef((props, ref) => {
     const [open, setOpen] = React.useState(false);
@@ -24,8 +21,8 @@ export const Pay = forwardRef((props, ref) => {
 
                 onClose={() => setOpen(false)}
                 onOpen={() => setOpen(true)}
-                open={open}
-            >
+                closeOnDimmerClick={false}
+                open={open}>
                 <Modal.Header>Select Payment Option</Modal.Header>
                 <Modal.Content image>
                     <Modal.Description style={{ paddingLeft: "7%" }}>
@@ -49,6 +46,7 @@ export const Pay = forwardRef((props, ref) => {
                     </form>
                     <Button color='black' onClick={() => {
                         setOpen(false);
+                        props.deleteOrder(props.order.id)
 
                     }}>
                         Cancel
@@ -66,7 +64,6 @@ export const Pay = forwardRef((props, ref) => {
                             if (document.getElementById("gridRadios2").checked) {
                                 document.forms[0].submit();
                                 props.clearCart()
-                                setOpen(false);
                             }
                         }}
                         positive
@@ -79,17 +76,18 @@ export const Pay = forwardRef((props, ref) => {
 
 })
 
-Pay.propTypes = {
-    order: PropTypes.array.isRequired,
-    clearCart: PropTypes.func.isRequired
-}
+// Pay.propTypes = {
+//     order: PropTypes.array.isRequired,
+//     clearCart: PropTypes.func.isRequired,
+//     deleteOrder: PropTypes.func.isRequired,
+// }
 
-const mapStateToProps = (state) => ({
-    order: state.orders.currentOrder
-})
+// const mapStateToProps = (state) => ({
+//     order: state.orders.currentOrder
+// })
 
 // const mapDispatchToProps = {
 
 // }
 
-export default connect(mapStateToProps, { clearCart })(Pay)
+export default Pay

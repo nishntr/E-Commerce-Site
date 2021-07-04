@@ -21,7 +21,7 @@ function Products(props) {
 
                         <Col xs={6} md={4}>
                             <Card className="p-style">
-                                <Image className="imgstyle " src={product.img_url} />
+                                <Image className="imgstyle" src={product.img_url} />
                                 <Card.Content>
                                     <Card.Header>{product.name}</Card.Header>
 
@@ -30,7 +30,12 @@ function Products(props) {
                                     </Card.Description>
                                 </Card.Content>
                                 <Card.Content extra>
-                                    <Button onClick={() => props.addItem(product)}>Buy Now</Button>
+                                    <Button onClick={() => {
+                                        props.history.push('/cart');
+                                        props.addItem(product)
+                                    }}>
+                                        Add to Cart
+                                    </Button>
                                 </Card.Content>
                             </Card>
                         </Col>

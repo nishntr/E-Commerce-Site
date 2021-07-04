@@ -22,8 +22,12 @@ export default function (state = initialState, action) {
                 orders: [...state.orders, action.payload],
                 currentOrder: []
             }
-
-
+        case "DeleteOrder":
+        case "ClearCart":
+            return {
+                ...state,
+                currentOrder: []
+            }
         case "LogoutSuccess":
             return {
                 ...state,

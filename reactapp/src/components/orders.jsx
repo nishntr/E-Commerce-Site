@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Container, Badge } from 'react-bootstrap'
-import { Icon, Image, List, Button, Header, Modal, Item, Label } from 'semantic-ui-react'
+import { Image, Item } from 'semantic-ui-react'
 
 import { getOrders } from '../actions/orders'
 import './css/main.css'
@@ -58,32 +58,12 @@ function Orders(props) {
                                 </Item></div>
                         ))}
 
-                        {/* <List.Item>
-                            {products.map((p) =>
-                            (<div style={{ padding: "4px" }}>
-                                <List.Content floated='right'>
-                                    <Badge variant="success">Success</Badge>
-                                </List.Content>
-                                <List.Content floated='right'>
-                                    <List.Description>
-                                        ₹{p.price}
-                                    </List.Description>
-                                </List.Content>
-                                <List.Content>
-                                    <List.Header>{p.name}</List.Header>
-                                </List.Content>
-                            </div>
-                            )
-                            )}
-                        </List.Item> */}
                     </Container>)
 
 
             }
             )
             }
-
-
 
         </div>
 

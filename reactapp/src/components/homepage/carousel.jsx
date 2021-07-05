@@ -5,7 +5,6 @@ import Carousel from 'react-bootstrap/Carousel'
 import { connect } from 'react-redux'
 import { getProducts } from '../../actions/products';
 import { addItem } from '../../actions/cart';
-import { Button } from 'react-bootstrap';
 
 function TopCarousel(props) {
     TopCarousel.propTypes = {
@@ -35,7 +34,6 @@ function TopCarousel(props) {
                         />
                         <Carousel.Caption className="">
                             <h3>{product.name}</h3>
-                            {/* <Button onClick={() => props.checkout(product.id)}>Buy Now</Button> */}
                         </Carousel.Caption>
                     </Carousel.Item>
                 ))}

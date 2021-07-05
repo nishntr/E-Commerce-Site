@@ -1,5 +1,7 @@
 import axios from "axios";
 import { tokenConfig } from "./auth";
+axios.defaults.baseURL = "https://e-shopp-django.herokuapp.com";
+
 
 export const getOrders = () => (dispatch, getState) => {
     axios.get('/orders', tokenConfig(getState))

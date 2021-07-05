@@ -15,5 +15,5 @@ urlpatterns = [
     path('orders', OrdersList.as_view(), name='orders'),
     path('orders/<int:pk>/delete', OrdersDelete.as_view(), name='delete'),
     path('redirect', RedirectView.as_view(
-        url='http://192.168.0.106:3000/orders'), name='redirect'),
+        url='https://e-shopp-react.netlify.app/orders'), name='redirect'),
 ]

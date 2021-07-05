@@ -4,7 +4,7 @@ import { Row, Col, Container } from 'react-bootstrap'
 import { addItem } from '../../actions/cart';
 import { connect } from 'react-redux'
 
-import { Button, Card, Icon, Image } from 'semantic-ui-react'
+import { Button, Card, Image } from 'semantic-ui-react'
 import '../css/products.css'
 
 function Products(props) {
@@ -30,7 +30,7 @@ function Products(props) {
                                     </Card.Description>
                                 </Card.Content>
                                 <Card.Content extra>
-                                    <Button onClick={() => {
+                                    <Button color='teal' onClick={() => {
                                         props.history.push('/cart');
                                         props.addItem(product)
                                     }}>

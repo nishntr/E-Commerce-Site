@@ -5,7 +5,7 @@ Django API is deployed on [heroku](https://e-shopp-django.herokuapp.com/)
 React app is deployed on [netlify](https://e-shopp-react.netlify.app/)
 
 #### Test login id
-username: ```testuser```<br/>
+username: ```test```<br/>
 password: ```123456```
 
 #### Test card

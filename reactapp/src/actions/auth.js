@@ -35,8 +35,17 @@ export const login = (username, password) => dispatch => {
                 payload: res.data
             })
         }).catch(err => {
-            console.log(err);
-            dispatch({ type: "LoginFail" })
+            let msg = null;
+            console.log(err.response.data);
+
+            if (err.response.data !== undefined && err.response.data['non_field_errors'] !== undefined) {
+                msg = err.response.data['non_field_errors'][0]
+                dispatch({ type: "LoginFail", msg: msg })
+            }
+            else if (err.response.data !== undefined) {
+                let keys = Object.keys(err.response.data)
+                keys.map((e) => { dispatch({ type: "LoginFail", msg: e + " : " + err.response.data[e][0] }) })
+            }
         });
 }
 

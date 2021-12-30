@@ -3,6 +3,7 @@ const initialState = {
     token: localStorage.getItem('token'),
     // isAuthenticated: null,
     isLoading: false,
+    errMsg: null,
     user: null
 }
 
@@ -11,16 +12,24 @@ export default function (state = initialState, action) {
         case "UserLoading":
             return {
                 ...state,
-                isLoading: true
+                isLoading: true,
+                errMsg: null,
             }
         case "UserLoaded":
             return {
                 ...state,
                 isLoading: false,
                 // isAuthenticated: true,
-                user: action.payload
+                user: action.payload,
+                errMsg: null,
             }
+        case "refresh":
+            return {
+                ...state,
+                isLoading: false,
+                errMsg: null,
 
+            }
         case "LoginSuccess":
         case "RegisterSuccess":
             localStorage.setItem('token', action.payload.token);
@@ -28,7 +37,8 @@ export default function (state = initialState, action) {
                 ...state,
                 ...action.payload,
                 // isAuthenticated: true,
-                isLoading: false
+                isLoading: false,
+                errMsg: null
             }
 
         case "LoginFail":
@@ -42,6 +52,7 @@ export default function (state = initialState, action) {
                 token: null,
                 // isAuthenticated: false,
                 user: null,
+                errMsg: action.msg
             }
 
         default:

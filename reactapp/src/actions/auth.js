@@ -36,7 +36,7 @@ export const login = (username, password) => dispatch => {
             })
         }).catch(err => {
             let msg = null;
-            console.log(err.response.data);
+            // console.log(err.response.data);
 
             if (err.response.data !== undefined && err.response.data['non_field_errors'] !== undefined) {
                 msg = err.response.data['non_field_errors'][0]
@@ -82,9 +82,18 @@ export const register = ({ username, name, email, password }) => (dispatch) => {
             });
         })
         .catch((err) => {
-            dispatch({
-                type: "RegisterFail",
-            });
+
+            let msg = null;
+            // console.log(err);
+
+            if (err.response.data !== undefined && err.response.data['non_field_errors'] !== undefined) {
+                msg = err.response.data['non_field_errors'][0]
+                dispatch({ type: "RegisterFail", msg: msg })
+            }
+            else if (err.response.data !== undefined) {
+                let keys = Object.keys(err.response.data)
+                keys.map((e) => { dispatch({ type: "RegisterFail", msg: e + " : " + err.response.data[e][0] }) })
+            }
         });
 };
 

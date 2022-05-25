@@ -63,8 +63,10 @@ class CheckoutView(CreateAPIView):
                 'product': names,
                 'name': name,
                 'email': email,
-                'surl': 'https://e-shopp-django.herokuapp.com/status',
-                'furl': 'https://e-shopp-django.herokuapp.com/status',
+                'surl': 'http://localhost:8000/status',
+                'furl': 'http://localhost:8000/status',
+                # 'surl': 'https://e-shopp-django.herokuapp.com/status',
+                # 'furl': 'https://e-shopp-django.herokuapp.com/status',
                 'hash': hash
 
             }
@@ -104,6 +106,13 @@ class StatusView(APIView):
         if status == 'success':
             t.status = True
             t.save()
+            products = t.product.all()
+            print(products)
+            for prod in products:
+                prod.stock -= 1
+                print(prod.stock)
+                prod.save()
+
             print("completed for:" + t.user.name)
         return redirect('payment:redirect')
 

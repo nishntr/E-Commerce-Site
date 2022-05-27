@@ -63,8 +63,12 @@ function Cart(props) {
                         <Icon name="money bill alternate outline" />
                         <List.Content>Total</List.Content>
                     </List.Item>
-
+                    <br />
                     <List.Item>
+                        <List.Content floated='left'>
+                            <Button floated="right" color="purple" onClick={() => props.history.push('/')} >Explore</Button>
+
+                        </List.Content>
                         <List.Content floated='right'>
                             <Button
                                 onClick={() => props.clearCart()} color='grey' animated>

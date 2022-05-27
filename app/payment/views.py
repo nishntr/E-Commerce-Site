@@ -109,9 +109,10 @@ class StatusView(APIView):
             products = t.product.all()
             print(products)
             for prod in products:
-                prod.stock -= 1
-                print(prod.stock)
-                prod.save()
+                if prod.stock > 0:
+                    prod.stock -= 1
+                    print(prod.stock)
+                    prod.save()
 
             print("completed for:" + t.user.name)
         return redirect('payment:redirect')

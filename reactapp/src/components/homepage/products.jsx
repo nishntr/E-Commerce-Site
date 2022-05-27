@@ -30,12 +30,21 @@ function Products(props) {
                                     </Card.Description>
                                 </Card.Content>
                                 <Card.Content extra>
-                                    <Button color='teal' onClick={() => {
-                                        props.history.push('/cart');
-                                        props.addItem(product)
-                                    }}>
-                                        Add to Cart
-                                    </Button>
+
+                                    {product.stock === 0 ?
+                                        <Button color='teal' disabled>
+
+                                            Out of stock
+                                        </Button>
+                                        :
+                                        <Button color='teal' onClick={() => {
+                                            props.history.push('/cart');
+                                            props.addItem(product)
+                                        }}>
+
+                                            Add to Cart
+                                        </Button>}
+
                                 </Card.Content>
                             </Card>
                         </Col>

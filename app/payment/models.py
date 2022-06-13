@@ -13,6 +13,9 @@ class Product(models.Model):
     def get_name(self):
         return self.name
 
+    def get_stock(self):
+        return self.stock
+
     def __str__(self):
         return self.name
 

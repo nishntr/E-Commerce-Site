@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect, useDispatch } from 'react-redux';
-import { checkout, deleteOrder } from '../../actions/orders'
+import { checkout, deleteOrder, checkStock } from '../../actions/orders'
 import { getProducts } from '../../actions/products'
 import { clearCart, addCartItem } from '../../actions/cart'
 import { Container } from 'react-bootstrap'
@@ -69,18 +69,7 @@ function Cart(props) {
     }, [props.cartItems])
 
 
-    // usestate for all vars
-    // props.items.forEach((item) => {
-    //     total += Number(item.price)
-    // });
-    // props.items.forEach((item) => {
-    //     ids.push(item.id)
-    // })
-    // props.items.forEach((item) => {
-    //     namelist += item.name + ", "
-    // })
 
-    // var d = {}
 
     // let chk = async () => {
     //     props.checkout(ids, total, namelist);
@@ -149,8 +138,13 @@ function Cart(props) {
                                     }
                                     else {
                                         // check stock, then useeffect for checkout
-                                        let res = await props.checkout(ids, total, namelist);
-                                        payRef.current.show()
+                                        let stock = await props.checkStock(ids)
+                                        if (stock) {
+                                            props.checkout(ids, total, namelist);
+                                            payRef.current.show()
+                                        } else {
+                                            console.log("Out of stock items in cart")
+                                        }
                                     }
                                 }
                                 } color='green' animated>
@@ -205,6 +199,7 @@ function Cart(props) {
 Cart.propTypes = {
     items: PropTypes.array.isRequired,
     checkout: PropTypes.func.isRequired,
+    checkStock: PropTypes.func.isRequired,
     order: PropTypes.array.isRequired,
     getProducts: PropTypes.func.isRequired,
     addCartItem: PropTypes.func.isRequired,
@@ -221,5 +216,5 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps, { checkout, getProducts, addCartItem, clearCart, deleteOrder })(Cart)
+export default connect(mapStateToProps, { checkout, checkStock, getProducts, addCartItem, clearCart, deleteOrder })(Cart)
 

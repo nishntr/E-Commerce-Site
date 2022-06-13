@@ -1,3 +1,4 @@
+from operator import truediv
 from accounts.models import User
 # from django.views.decorators.csrf import csrf_exempt
 import random
@@ -19,6 +20,18 @@ from rest_framework.response import Response
 class ProductView(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class CheckStock(APIView):
+    def post(self, request):
+        print(request)
+        ids = request.data['ids']
+        stock = True
+        for id in ids:
+            product = Product.objects.get(id=id)
+            if product.stock == 0:
+                stock = False
+        return Response(stock)
 
 
 class CheckoutView(CreateAPIView):

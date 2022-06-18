@@ -76,10 +76,10 @@ class CheckoutView(CreateAPIView):
                 'product': names,
                 'name': name,
                 'email': email,
-                'surl': 'http://localhost:8000/status',
-                'furl': 'http://localhost:8000/status',
-                # 'surl': 'https://e-shopp-django.herokuapp.com/status',
-                # 'furl': 'https://e-shopp-django.herokuapp.com/status',
+                # 'surl': 'http://localhost:8000/status',
+                # 'furl': 'http://localhost:8000/status',
+                'surl': 'https://e-shopp-django.herokuapp.com/status',
+                'furl': 'https://e-shopp-django.herokuapp.com/status',
                 'hash': hash
 
             }

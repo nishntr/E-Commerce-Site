@@ -15,8 +15,8 @@ urlpatterns = [
     path('stock', CheckStock.as_view(), name='stock'),
     path('orders', OrdersList.as_view(), name='orders'),
     path('orders/<int:pk>/delete', OrdersDelete.as_view(), name='delete'),
-    path('redirect', RedirectView.as_view(
-        url='http://localhost:3000/orders'), name='redirect'),
     # path('redirect', RedirectView.as_view(
-    #     url='https://e-shopp-react.netlify.app/orders'), name='redirect'),
+    #     url='http://localhost:3000/orders'), name='redirect'),
+    path('redirect', RedirectView.as_view(
+        url='https://e-shopp-react.netlify.app/orders'), name='redirect'),
 ]

@@ -7,9 +7,13 @@ import { clearCart, addCartItem } from '../../actions/cart'
 import { Container } from 'react-bootstrap'
 import { Icon, Image, List, Button } from 'semantic-ui-react'
 import { Pay } from './pay'
-
-
 import '../css/main.css';
+
+import axios from "axios";
+import { tokenConfig } from "../../actions/auth";
+// axios.defaults.baseURL = "https://e-shopp-django.herokuapp.com";
+axios.defaults.baseURL = "http://localhost:8000";
+
 
 function Cart(props) {
 
@@ -53,6 +57,7 @@ function Cart(props) {
         let total = 0
         let ids = []
         let names = ""
+        setStockCheck(true)
         Object.entries(props.cartItems).map(([k, v]) => {
             if (v.stock === 0) {
                 setStockCheck(false)
@@ -132,19 +137,32 @@ function Cart(props) {
                                 </Button.Content>
                             </Button>
                             <Button disabled={!stockCheck}
-                                onClick={async () => {
+                                onClick={() => {
+                                    // try usestate
+                                    const check = async () => {
+
+
+                                        const stock = await axios.post('/stock', { 'ids': ids }, tokenConfig)
+                                        console.log(stock)
+
+                                        // const stock = await props.checkStock(ids);
+                                        // console.log(stock)
+                                        if (stock.data == true) {
+                                            props.checkout(ids, total, namelist);
+                                            payRef.current.show();
+                                        } else {
+                                            console.log("Out of stock items in cart");
+                                            props.getProducts()
+                                        }
+                                    }
+
+
                                     if (props.order === null) {
-                                        console.log("false")
+                                        console.log("false");
                                     }
                                     else {
                                         // check stock, then useeffect for checkout
-                                        let stock = await props.checkStock(ids)
-                                        if (stock) {
-                                            props.checkout(ids, total, namelist);
-                                            payRef.current.show()
-                                        } else {
-                                            console.log("Out of stock items in cart")
-                                        }
+                                        check()
                                     }
                                 }
                                 } color='green' animated>

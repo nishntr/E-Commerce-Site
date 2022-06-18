@@ -1,3 +1,4 @@
+from operator import truediv
 from accounts.models import User
 # from django.views.decorators.csrf import csrf_exempt
 import random
@@ -19,6 +20,18 @@ from rest_framework.response import Response
 class ProductView(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class CheckStock(APIView):
+    def post(self, request):
+        print(request)
+        ids = request.data['ids']
+        stock = True
+        for id in ids:
+            product = Product.objects.get(id=id)
+            if product.stock == 0:
+                stock = False
+        return Response(stock)
 
 
 class CheckoutView(CreateAPIView):
@@ -63,8 +76,10 @@ class CheckoutView(CreateAPIView):
                 'product': names,
                 'name': name,
                 'email': email,
-                'surl': 'https://e-shopp-django.herokuapp.com/status',
-                'furl': 'https://e-shopp-django.herokuapp.com/status',
+                'surl': 'http://localhost:8000/status',
+                'furl': 'http://localhost:8000/status',
+                # 'surl': 'https://e-shopp-django.herokuapp.com/status',
+                # 'furl': 'https://e-shopp-django.herokuapp.com/status',
                 'hash': hash
 
             }
@@ -104,6 +119,14 @@ class StatusView(APIView):
         if status == 'success':
             t.status = True
             t.save()
+            products = t.product.all()
+            print(products)
+            for prod in products:
+                if prod.stock > 0:
+                    prod.stock -= 1
+                    print(prod.stock)
+                    prod.save()
+
             print("completed for:" + t.user.name)
         return redirect('payment:redirect')
 

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col, Container } from 'react-bootstrap'
 import { addItem } from '../../actions/cart';
+import { getProducts } from '../../actions/products';
 import { connect } from 'react-redux'
 
 import { Button, Card, Image } from 'semantic-ui-react'
@@ -10,6 +11,7 @@ import '../css/products.css'
 function Products(props) {
     Products.propTypes = {
         products: PropTypes.array.isRequired,
+        getProducts: PropTypes.func.isRequired,
         addItem: PropTypes.func.isRequired
     }
     return (
@@ -30,12 +32,23 @@ function Products(props) {
                                     </Card.Description>
                                 </Card.Content>
                                 <Card.Content extra>
-                                    <Button color='teal' onClick={() => {
-                                        props.history.push('/cart');
-                                        props.addItem(product)
-                                    }}>
-                                        Add to Cart
-                                    </Button>
+
+                                    {product.stock === 0 ?
+                                        <Button color='teal' disabled>
+
+                                            Out of stock
+                                        </Button>
+                                        :
+                                        <Button color='teal' onClick={() => {
+                                            props.addItem(product.id)
+                                            props.getProducts()
+                                            props.history.push('/cart');
+
+                                        }}>
+
+                                            Add to Cart
+                                        </Button>}
+
                                 </Card.Content>
                             </Card>
                         </Col>
@@ -50,4 +63,4 @@ const mapStateToProps = state => ({
     products: state.product.products
 })
 
-export default connect(mapStateToProps, { addItem })(Products);
+export default connect(mapStateToProps, { addItem, getProducts })(Products);

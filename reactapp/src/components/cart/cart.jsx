@@ -1,32 +1,80 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { checkout, deleteOrder } from '../../actions/orders'
-import { clearCart } from '../../actions/cart'
+import { connect, useDispatch } from 'react-redux';
+import { checkout, deleteOrder, checkStock } from '../../actions/orders'
+import { getProducts } from '../../actions/products'
+import { clearCart, addCartItem } from '../../actions/cart'
 import { Container } from 'react-bootstrap'
 import { Icon, Image, List, Button } from 'semantic-ui-react'
 import { Pay } from './pay'
-
-
 import '../css/main.css';
+
+import axios from "axios";
+import { tokenConfig } from "../../actions/auth";
+axios.defaults.baseURL = "https://e-shopp-django.herokuapp.com";
+// axios.defaults.baseURL = "http://localhost:8000";
+
 
 function Cart(props) {
 
     const payRef = useRef();
+    const [total, setTotal] = useState(0);
+    const [ids, setIds] = useState([]);
+    const [namelist, setNamelist] = useState("[]");
+    const [stockCheck, setStockCheck] = useState(true)
 
-    let total = 0;
-    let ids = [];
-    let namelist = "";
+    const dispatch = useDispatch();
 
-    props.items.forEach((item) => {
-        total += Number(item.price)
-    });
-    props.items.forEach((item) => {
-        ids.push(item.id)
-    })
-    props.items.forEach((item) => {
-        namelist += item.name + ", "
-    })
+
+    useEffect(() => {
+        var cartItems = [];
+        console.log(props.items)
+        console.log(props.products)
+        cartItems = props.products.filter(pd => props.items.includes(pd.id)) //select products whose id are in cart
+
+
+        // console.log(cartItems)
+        cartItems.forEach((item) => {
+            console.log(item)
+            props.addCartItem(item.id, {
+                "name": item.name,
+                "price": item.price,
+                "stock": item.stock,
+                "img_url": item.img_url
+            })
+        })
+
+
+    }, [props.products])
+
+    useEffect(() => {
+        props.getProducts()
+
+    }, [])
+
+    useEffect(() => {
+        console.log(props.cartItems)
+        let total = 0
+        let ids = []
+        let names = ""
+        setStockCheck(true)
+        Object.entries(props.cartItems).map(([k, v]) => {
+            if (v.stock === 0) {
+                setStockCheck(false)
+            }
+            total += Number(v.price);
+            ids.push(k);
+            names += v.name + ", "
+
+        })
+        console.log(ids)
+        setTotal(total)
+        setIds(ids)
+        setNamelist(names)
+    }, [props.cartItems])
+
+
+
 
     // let chk = async () => {
     //     props.checkout(ids, total, namelist);
@@ -38,23 +86,34 @@ function Cart(props) {
         <div>
             <Container className=" rounded cart-style" style={{ maxWidth: "476px" }}>
                 <List animated verticalAlign='middle'>
-                    <Icon style={{ fontSize: "2em", marginBottom: "8px" }} name="shopping cart" />
-                    {props.items.map(item => (
-                        <List.Item>
-                            <Image avatar src={item.img_url} />
-                            <List.Content>
-                                <List.Header>{item.name}</List.Header>
-                            </List.Content>
-                            <List.Content floated='right'>
-                                <List.Description>
-                                    ₹{item.price}
-                                </List.Description>
-                            </List.Content>
 
-                        </List.Item>
-                    )
-                    )
+                    <Icon style={{ fontSize: "2em", marginBottom: "8px" }} name="shopping cart" />
+
+                    {
+                        Object.entries(props.cartItems).map(([k, v]) => (
+                            <List.Item key={k}>
+                                <Image avatar src={v.img_url} />
+                                <List.Content>
+                                    <List.Header>
+                                        <p>
+                                            {v.name}
+
+                                            {v.stock === 0 ? <text style={{ color: "red" }}> Out of Stock</text> : ""}
+                                        </p>
+
+                                    </List.Header>
+                                </List.Content>
+                                <List.Content floated='right'>
+                                    <List.Description>
+                                        ₹{v.price}
+
+                                    </List.Description>
+                                </List.Content>
+
+                            </List.Item>
+                        ))
                     }
+
                     <hr />
                     <List.Item>
                         <List.Content floated='right'>
@@ -63,8 +122,12 @@ function Cart(props) {
                         <Icon name="money bill alternate outline" />
                         <List.Content>Total</List.Content>
                     </List.Item>
-
+                    <br />
                     <List.Item>
+                        <List.Content floated='left'>
+                            <Button floated="right" color="purple" onClick={() => props.history.push('/')} >Explore</Button>
+
+                        </List.Content>
                         <List.Content floated='right'>
                             <Button
                                 onClick={() => props.clearCart()} color='grey' animated>
@@ -73,14 +136,33 @@ function Cart(props) {
                                     <Icon name='delete' />
                                 </Button.Content>
                             </Button>
-                            <Button
-                                onClick={async () => {
+                            <Button disabled={!stockCheck}
+                                onClick={() => {
+                                    // try usestate
+                                    const check = async () => {
+
+
+                                        const stock = await axios.post('/stock', { 'ids': ids }, tokenConfig)
+                                        console.log(stock)
+
+                                        // const stock = await props.checkStock(ids);
+                                        // console.log(stock)
+                                        if (stock.data == true) {
+                                            props.checkout(ids, total, namelist);
+                                            payRef.current.show();
+                                        } else {
+                                            console.log("Out of stock items in cart");
+                                            props.getProducts()
+                                        }
+                                    }
+
+
                                     if (props.order === null) {
-                                        console.log("false")
+                                        console.log("false");
                                     }
                                     else {
-                                        let res = await props.checkout(ids, total, namelist);
-                                        payRef.current.show()
+                                        // check stock, then useeffect for checkout
+                                        check()
                                     }
                                 }
                                 } color='green' animated>
@@ -135,7 +217,10 @@ function Cart(props) {
 Cart.propTypes = {
     items: PropTypes.array.isRequired,
     checkout: PropTypes.func.isRequired,
+    checkStock: PropTypes.func.isRequired,
     order: PropTypes.array.isRequired,
+    getProducts: PropTypes.func.isRequired,
+    addCartItem: PropTypes.func.isRequired,
     clearCart: PropTypes.func.isRequired,
     deleteOrder: PropTypes.func.isRequired,
 
@@ -143,9 +228,11 @@ Cart.propTypes = {
 
 const mapStateToProps = state => ({
     items: state.cart.items,
+    cartItems: state.cart.cartItems,
+    products: state.product.products,
     order: state.orders.currentOrder
 })
 
 
-export default connect(mapStateToProps, { checkout, clearCart, deleteOrder })(Cart)
+export default connect(mapStateToProps, { checkout, checkStock, getProducts, addCartItem, clearCart, deleteOrder })(Cart)
 

@@ -8,11 +8,13 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { Icon } from 'semantic-ui-react';
 import { logout } from '../actions/auth';
+import { getProducts } from '../actions/products';
 
 function Header(props) {
 
     Header.propTypes = {
         auth: PropTypes.object.isRequired,
+        getProducts: PropTypes.func.isRequired,
         logout: PropTypes.func.isRequired,
     }
 
@@ -24,7 +26,9 @@ function Header(props) {
     const authLinks = (
         <Nav className="justify-content-end" style={{ width: "100%", paddingRight: 19 }}>
             <Nav.Link   >
-                <NavLink style={{ textDecoration: "none" }} to="/cart">
+                <NavLink style={{ textDecoration: "none" }}
+                    // onClick={() => props.getProducts()}
+                    to="/cart">
                     <Icon name='shopping cart' />Cart
                 </NavLink>
             </Nav.Link>
@@ -66,4 +70,4 @@ const mapStateToProps = state => ({
     auth: state.auth,
 });
 
-export default connect(mapStateToProps, { logout })(Header);
+export default connect(mapStateToProps, { logout, getProducts })(Header);

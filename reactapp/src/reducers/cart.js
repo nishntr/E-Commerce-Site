@@ -1,6 +1,7 @@
 
 const initialState = {
     items: [],
+    cartItems: {}
 };
 
 export default function (state = initialState, action) {
@@ -15,11 +16,26 @@ export default function (state = initialState, action) {
                 ...state,
                 items: [...state.items, action.payload],
             }
+        case "LoadCartItems":
+            return {
+                ...state,
+                cartItems: action.payload
+            };
+        case "AddCartItem":
+            return {
+                ...state,
+                // cartItems: [...state.cartItems, action.payload],
+                cartItems: {
+                    ...state.cartItems,
+                    [action.pid]: action.pinfo
+                },
+            }
         case "ClearCart":
         case "LogoutSuccess":
             return {
                 ...state,
-                items: []
+                items: [],
+                cartItems: []
             }
         default:
             return state;

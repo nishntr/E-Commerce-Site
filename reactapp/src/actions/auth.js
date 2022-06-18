@@ -1,6 +1,8 @@
 import axios from "axios";
 
 axios.defaults.baseURL = "https://e-shopp-django.herokuapp.com";
+// axios.defaults.baseURL = "http://localhost:8000";
+
 
 
 export const loadUser = () => (dispatch, getState) => {
@@ -36,7 +38,8 @@ export const login = (username, password) => dispatch => {
             })
         }).catch(err => {
             let msg = null;
-            // console.log(err.response.data);
+            console.log(err);
+            console.log(err.response);
 
             if (err.response.data !== undefined && err.response.data['non_field_errors'] !== undefined) {
                 msg = err.response.data['non_field_errors'][0]
